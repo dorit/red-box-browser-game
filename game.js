@@ -9,6 +9,45 @@ kaboom({
     debug: true
 })
 
+// Mobile control state
+let isMobileLeft = false;
+let isMobileRight = false;
+let isMobileJump = false;
+
+// Setup mobile controls
+document.addEventListener("DOMContentLoaded", () => {
+    const leftBtn = document.getElementById("left-btn");
+    const rightBtn = document.getElementById("right-btn");
+    const jumpBtn = document.getElementById("jump-btn");
+
+    // Left button
+    leftBtn.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        isMobileLeft = true;
+    });
+    leftBtn.addEventListener("touchend", () => {
+        isMobileLeft = false;
+    });
+
+    // Right button
+    rightBtn.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        isMobileRight = true;
+    });
+    rightBtn.addEventListener("touchend", () => {
+        isMobileRight = false;
+    });
+
+    // Jump button
+    jumpBtn.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        isMobileJump = true;
+    });
+    jumpBtn.addEventListener("touchend", () => {
+        isMobileJump = false;
+    });
+});
+
 // Load components
 loadBean()
 
@@ -281,13 +320,18 @@ scene("game", () => {
         ])
     })
 
-    // Player controls
+    // Player movement
     onUpdate(() => {
-        if (isKeyDown("left")) {
+        // Handle keyboard controls
+        if (isKeyDown("left") || isMobileLeft) {
             player.move(-MOVE_SPEED, 0)
         }
-        if (isKeyDown("right")) {
+        if (isKeyDown("right") || isMobileRight) {
             player.move(MOVE_SPEED, 0)
+        }
+        if ((isKeyPressed("space") || isMobileJump) && player.isGrounded()) {
+            player.jumpIfAble()
+            isMobileJump = false  // Reset jump to prevent continuous jumping
         }
     })
 
@@ -313,14 +357,6 @@ scene("game", () => {
         
         if (collectiblesGathered >= TOTAL_COLLECTIBLES) {
             completeGame()
-        }
-    })
-
-    // Jump control
-    onKeyPress("space", () => {
-        // Only allow jumping if game is not complete
-        if (!get("completion-message").length) {
-            player.jumpIfAble()
         }
     })
 
