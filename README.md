@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Simple Platform Game
 
 A basic platformer game built with Kaboom.js where you control a red square that can move and jump between platforms.
@@ -26,3 +27,6 @@ Built using:
 - HTML5
 - JavaScript
 - Kaboom.js game engine 
+=======
+# red-box-browser-game
+>>>>>>> 2d09e695901378f3e99bd5a3bfa4d5f7dcaec2be
